@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html ng-app="Ratmilk">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  </head>
+  <body ng-controller="MainCtrl">
+    <div class="title">
+      <h1>SONG SAVER</h1>
+    </div>
+      <div class="">
+          <div class="col-sm-3 col-md-2 sidebar">
+              <a ng-click="setCurrentCategory(null)"><img class="logo" src="http://i.imgur.com/uofnm0nt.jpg"></a>
+              <ul class="nav nav-sidebar">
+                  <li ng-repeat="category in categories" ng-class="{'active':isCurrentCategory(category)}">
+                      <a class="categ" ng-click="setCurrentCategory(category)">
+                          {{category.name}}
+                      </a>
+                  </li>
+              </ul>
+          </div>
+          <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+              <div ng-class="{active: isSelectedBookmark(bookmark.id)}" ng-repeat="bookmark in bookmarks | filter:{category:currentCategory.name}">
+                  <button type="button" class="close" ng-click="deleteBookmark(bookmark)">&times;</button>
+                  <button type="button" class="btn btn-link" ng-click="setEditedBookmark(bookmark);startEditing();" ><span class="glyphicon glyphicon-pencil"></span>
+                  </button>
+                  <a href="{{bookmark.url}}" target="_blank">
+                    {{bookmark.title}}
+                    {{bookmark.artist}}
+                  </a>
+              </div>
+              <hr/>
+              <!-- CREATING -->
+              <div ng-if="shouldShowCreating()">
+                  <button type="button" class="btn btn-link" ng-click="startCreating()">
+                      <span class="glyphicon glyphicon-plus"></span>
+                      Create Bookmark
+                  </button>
+                  <form class="create-form" ng-show="isCreating" role="form" ng-submit="createBookmark(newBookmark)" novalidate>
+                      <div class="form-group">
+                          <label for="newBookmarkTitle">Bookmark Title</label>
+                          <input type="text" class="form-control" id="newBookmarkTitle" ng-model="newBookmark.title" placeholder="Enter title">
+                      </div>
+                      <div class="form-group">
+                          <label for="newBookmarkArtist">Bookmark Artist</label>
+                          <input type="text" class="form-control" id="newBookmarkArtist" ng-model="newBookmark.artist" placeholder="Enter Artist">
+                      </div>
+                      <div class="form-group">
+                          <label for="newBookmarkURL">Bookmark URL</label>
+                          <input type="text" class="form-control" id="newBookmarkURL" ng-model="newBookmark.url" placeholder="Enter URL">
+                      </div>
+                      <button type="submit" class="btn btn-info btn-lg">Create</button>
+                      <button type="button" class="btn btn-default btn-lg pull-right" ng-click="cancelCreating()">Cancel</button>
+                  </form>
+              </div>
+              <!-- EDITING -->
+              <div ng-show="shouldShowEditing()">
+                <h4>Editing {{editedBookmark.title}}</h4>
+
+                <form class="edit-form" role="form" ng-submit="updateBookmark(editedBookmark)" novalidate>
+                    <div class="form-group">
+                        <label>Bookmark Title</label>
+                        <input type="text" class="form-control" ng-model="editedBookmark.title" placeholder="Enter title">
+                    </div>
+                    <div class="form-group">
+                        <label>Bookmark URL</label>
+                        <input type="text" class="form-control" ng-model="editedBookmark.url" placeholder="Enter URL">
+                    </div>
+                    <button type="submit" class="btn btn-info btn-lg">Save</button>
+                    <button type="button" class="btn btn-default btn-lg pull-right" ng-click="cancelEditing()">Cancel</button>
+                </form>
+            </div>
+          </div>
+        </div>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js" ></script>
+  <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  </body>
+  <script src="main.js" charset="utf-8"></script>
+</html>
